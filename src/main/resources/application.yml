@@ -13,3 +13,6 @@ spring:
 springdoc:
   swagger-ui:
     path: /ui
+server:
+  servlet:
+    context-path: /api
