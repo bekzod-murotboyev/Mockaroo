@@ -28,6 +28,7 @@ public class BaseEntity<T> {
 
     @CreationTimestamp
     @CreatedDate
+    @Column(columnDefinition = "timestamp default now()")
     LocalDateTime createdAt;
 
     @UpdateTimestamp
