@@ -2,19 +2,14 @@ package uz.pdp.mockaroo.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.javafaker.Faker;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.apache.tomcat.jni.Local;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.pdp.mockaroo.entity.base.BaseEntity;
 
 import javax.persistence.Entity;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Locale;
-import java.util.Random;
 
 @AllArgsConstructor
 @NoArgsConstructor
