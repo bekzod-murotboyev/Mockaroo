@@ -15,8 +15,9 @@ public class MockController {
     // IT IS ONLY FOR SQL, FOR USING OTHER FORMAT YOU NEED TO CREATE ANOTHER METHOD WITH ANOTHER URL
     @GetMapping("/sql")
     public HttpEntity<ApiResponse> getSql(@RequestBody ApiRequestSql request){
-
         return null;
     }
+
+
 
 }
