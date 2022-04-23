@@ -1,6 +1,5 @@
 package uz.pdp.mockaroo.service;
 
-import com.github.javafaker.Faker;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

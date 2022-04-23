@@ -7,7 +7,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
 import uz.pdp.mockaroo.service.AuthService;
+
+import java.io.Closeable;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -29,6 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf()
                 .disable()
+                .cors()
+                .configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+                .and()
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
                 .anyRequest()
