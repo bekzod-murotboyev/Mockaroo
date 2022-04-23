@@ -85,7 +85,7 @@ public record MockingService(MockData mockData) {
                     stringBuffer.append("{\n");
                     request.getFields().forEach(
                             field -> {
-                                stringBuffer.append("\""+field.getName()+"\":");
+                                stringBuffer.append("\"").append(field.getName()).append("\":");
                                 stringBuffer.append(mockData.get(field));
                                 stringBuffer.append(",");
                             }
