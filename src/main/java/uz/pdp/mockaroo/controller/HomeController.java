@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/home")
+@RequestMapping("/")
 public class HomeController {
 
     @GetMapping("/init")
@@ -25,11 +25,15 @@ public class HomeController {
                         new TypeFormat(Arrays.stream(FieldType.values()).map(fieldType ->
                                                fieldType.name().contains("_") ? fieldType.name().replace("_", " ") : fieldType.name()
                                         ).toList(),
-                                        Arrays.stream(FieldType.values()).map(fieldType ->
-                                                fieldType.name().contains("_") ? fieldType.name().replace("_", " ") : fieldType.name()
+                                        Arrays.stream(Format.values()).map(format ->
+                                                format.name().contains("_") ? format.name().replace("_", " ") : format.name()
                                         ).toList())));
     }
 
 
 
+    @GetMapping()
+    public String tes(){
+        return "asfdf";
+    }
 }

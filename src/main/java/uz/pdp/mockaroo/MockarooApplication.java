@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @OpenAPIDefinition
 @SpringBootApplication
 public class MockarooApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(MockarooApplication.class, args);
     }

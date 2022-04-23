@@ -19,7 +19,6 @@ public class MockData {
         return map.get(field.getType()).apply(field);
     }
 
-
     public MockData add(FieldType type, Function<Field, String> function) {
         map.put(type, function);
         return this;
