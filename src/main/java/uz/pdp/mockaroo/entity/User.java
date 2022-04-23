@@ -22,6 +22,8 @@ public class User extends BaseEntity<Long> implements UserDetails {
     String email;
     String password;
 
+    String phoneNumber;
+
 
     boolean accountNonExpired = true;
     boolean accountNonLocked = true;
