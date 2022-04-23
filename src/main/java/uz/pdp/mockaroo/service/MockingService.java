@@ -36,10 +36,10 @@ public record MockingService(MockData mockData) {
         StringBuffer result = new StringBuffer("INSERT INTO " + request.getTableName() + '(');
         request.getFields().forEach(field -> result.append(field.getName()).append(','));
         result.setCharAt(result.length() - 1, ')');
-        result.append(" \nVALUES");
+        result.append(" \nVALUES\n");
 
 
-        IntStream.range(0, request.getCount()).forEach(i -> {
+        IntStream.range(0, request.getCount()).parallel().forEach(i -> {
             result.append('(');
             request.getFields().forEach(field -> result.append(mockData.get(field)).append(','));
             result.insert(result.length() - 1, ')').append('\n');

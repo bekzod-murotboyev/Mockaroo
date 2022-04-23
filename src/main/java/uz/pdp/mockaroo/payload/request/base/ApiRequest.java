@@ -3,7 +3,6 @@ package uz.pdp.mockaroo.payload.request.base;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import uz.pdp.mockaroo.payload.filed.Field;
-import uz.pdp.mockaroo.util.enums.Format;
 
 import java.util.List;
 
@@ -18,4 +17,8 @@ public class ApiRequest {
     String format;
 
     int count;
+
+    String tableName;
+
+    Boolean createTable;
 }
