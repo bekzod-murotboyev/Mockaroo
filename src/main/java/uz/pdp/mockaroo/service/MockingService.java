@@ -22,7 +22,7 @@ public record MockingService(MockData mockData) {
         return new ApiResponse("Success", true, result);
     }
 
-    public ApiResponse check(ApiRequest request) {
+    public ApiResponse check(ApiRequestSql request) {
         String result = switch (request.getFormat()) {
             case "SQL" -> dataSQl(request);
             case "CSV" -> dataCSV(request);
@@ -33,8 +33,8 @@ public record MockingService(MockData mockData) {
         return new ApiResponse("Success", true, result);
     }
 
-    private String dataSQl(ApiRequest request) {
-        StringBuffer result = new StringBuffer("INSERT INTO " + "TABLE_NAME" + '(');
+    private String dataSQl(ApiRequestSql request) {
+        StringBuffer result = new StringBuffer("INSERT INTO " + request.getTableName() + '(');
         request.getFields().forEach(field -> result.append(field.getName()).append(','));
         result.setCharAt(result.length() - 1, ')');
         result.append(" \nVALUES\n");
@@ -44,13 +44,12 @@ public record MockingService(MockData mockData) {
             result.append('(');
             request.getFields().forEach(
                     field -> {
-                        if (field.getType().isString()) result.append("\'").append(mockData.get(field)).append("\'").append(',');
+                        if (field.getType().isString()) result.append("'").append(mockData.get(field)).append("'").append(',');
                         else result.append(mockData.get(field)).append(',');
                     });
             result.insert(result.length() - 1, ')').append('\n');
             result.append("\n");
         });
-        result.setLength(result.length() - 1);
         return result.toString();
     }
 
@@ -68,10 +67,7 @@ public record MockingService(MockData mockData) {
         IntStream.range(0, request.getCount()).forEach(
                 i -> {
                     request.getFields().forEach(
-                            field -> {
-                                stringBuffer.append(mockData.get(field));
-                                stringBuffer.append(",");
-                            }
+                            field -> stringBuffer.append(mockData.get(field)).append(",")
                     );
                     stringBuffer.deleteCharAt(stringBuffer.length() - 1);
                     stringBuffer.append("\n");
@@ -91,12 +87,12 @@ public record MockingService(MockData mockData) {
                     stringBuffer.append("{\n");
                     request.getFields().forEach(
                             field -> {
-                                stringBuffer.append("\""+field.getName()+"\":");
+                                stringBuffer.append("\"").append(field.getName()).append("\":");
                                 if(field.getType().isString())
-                                    stringBuffer.append("\""+mockData.get(field)+"\"");
+                                    stringBuffer.append("\"").append(mockData.get(field)).append("\"");
                                 else
                                     stringBuffer.append(mockData.get(field));
-                                stringBuffer.append(",");
+                                stringBuffer.append(",\n");
                             }
                     );
                     stringBuffer.deleteCharAt(stringBuffer.length() - 1);
