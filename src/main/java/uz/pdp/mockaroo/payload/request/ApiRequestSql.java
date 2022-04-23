@@ -12,9 +12,7 @@ import uz.pdp.mockaroo.payload.request.base.ApiRequest;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ApiRequestSql extends ApiRequest {
 
-    @JsonProperty("table_name")
     String tableName;
 
-    @JsonProperty("create_table")
-    boolean createTable;
+    Boolean createTable;
 }

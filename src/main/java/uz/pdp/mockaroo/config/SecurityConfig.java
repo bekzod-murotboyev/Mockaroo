@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import uz.pdp.mockaroo.service.AuthService;
 
+import java.io.Closeable;
+
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration

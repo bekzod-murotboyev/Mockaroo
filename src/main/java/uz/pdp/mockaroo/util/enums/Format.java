@@ -16,14 +16,4 @@ public enum Format {
     XML,
     DBUNIT_XML;
 
-    static class FormatField{
-        String type;
-        String name;
-    }
-
-    List<FormatField> list;
-
-    Format(FormatField... formatFields) {
-        this.list = List.of(formatFields);
-    }
 }

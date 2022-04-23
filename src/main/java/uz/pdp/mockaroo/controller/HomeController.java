@@ -10,26 +10,19 @@ import uz.pdp.mockaroo.util.enums.FieldType;
 import uz.pdp.mockaroo.util.enums.Format;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/home")
-public class HomeController {
+public class HomeController{
 
     @GetMapping("/init")
     public ResponseEntity<?> init() {
         return ResponseEntity.ok(
-                new ApiResponse("Initialize data",
+                new ApiResponse("Initial data successfully send",
                         true,
-                        new TypeFormat(Arrays.stream(FieldType.values()).map(fieldType ->
-                                               fieldType.name().contains("_") ? fieldType.name().replace("_", " ") : fieldType.name()
-                                        ).toList(),
-                                        Arrays.stream(FieldType.values()).map(fieldType ->
-                                                fieldType.name().contains("_") ? fieldType.name().replace("_", " ") : fieldType.name()
-                                        ).toList())));
+                        new TypeFormat(Arrays.stream(FieldType.values()).map(FieldType::name).toList(),
+                                Arrays.stream(Format.values()).map(Format::name).toList())));
     }
-
 
 
 }

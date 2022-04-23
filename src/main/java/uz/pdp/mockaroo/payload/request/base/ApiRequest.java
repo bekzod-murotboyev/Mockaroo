@@ -15,7 +15,7 @@ import java.util.List;
 public class ApiRequest {
     List<Field> fields;
 
-    Format format;
+    String format;
 
     int count;
 }
