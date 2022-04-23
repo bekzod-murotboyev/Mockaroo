@@ -12,15 +12,27 @@ public record MockingService(MockData mockData) {
 
     public ApiResponse download(ApiRequestSql request) {
         String result = switch (request.getFormat()) {
-            case "SQL" -> downloadSQl(request);
-            case "CSV" -> downloadCSV(request);
+//            case "SQL" -> downloadSQl(request);
+//            case "CSV" -> downloadCSV(request);
+//            case "JSON" -> downloadJSON(request);
             default -> "Error";
         };
 
         return new ApiResponse("Success", true, result);
     }
 
-    private String downloadSQl(ApiRequestSql request) {
+    public ApiResponse check(ApiRequestSql request) {
+        String result = switch (request.getFormat()) {
+            case "SQL" -> dataSQl(request);
+            case "CSV" -> dataCSV(request);
+            case "JSON" -> dataJSON(request);
+            default -> "Error";
+        };
+
+        return new ApiResponse("Success", true, result);
+    }
+
+    private String dataSQl(ApiRequestSql request) {
         StringBuffer result = new StringBuffer("INSERT INTO " + request.getTableName() + '(');
         request.getFields().forEach(field -> result.append(field.getName()).append(','));
         result.setCharAt(result.length() - 1, ')');
@@ -36,7 +48,7 @@ public record MockingService(MockData mockData) {
         return result.toString();
     }
 
-    public String downloadCSV(ApiRequestSql request) {
+    public String dataCSV(ApiRequestSql request) {
         StringBuffer stringBuffer = new StringBuffer();
         request.getFields().forEach(
                 field -> {
@@ -63,8 +75,28 @@ public record MockingService(MockData mockData) {
         return stringBuffer.toString();
     }
 
-    public ApiResponse check(ApiRequestSql request) {
-        return null;
+
+    public String dataJSON(ApiRequestSql request) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("[");
+
+        IntStream.range(0, request.getCount()).forEach(
+                i -> {
+                    stringBuffer.append("{\n");
+                    request.getFields().forEach(
+                            field -> {
+                                stringBuffer.append("\""+field.getName()+"\":");
+                                stringBuffer.append(mockData.get(field));
+                                stringBuffer.append(",");
+                            }
+                    );
+                    stringBuffer.deleteCharAt(stringBuffer.length() - 1);
+                    stringBuffer.append("\n},");
+                }
+        );
+        stringBuffer.deleteCharAt(stringBuffer.length() - 1);
+        stringBuffer.append("]");
+        return stringBuffer.toString();
     }
 
 }

@@ -90,15 +90,8 @@ public class AppConfig {
                 .add(STRECURRENCY_CODE, (Field field) -> faker.currency().code())
 
 
-                .add(STREET_NAME, (Field field) -> faker.address().streetName())
-                .add(STREET_NAME, (Field field) -> faker.address().streetName())
-                .add(STREET_NAME, (Field field) -> faker.address().streetName())
-                .add(STREET_NAME, (Field field) -> faker.address().streetName())
-                .add(STREET_NAME, (Field field) -> faker.address().streetName())
-                .add(STREET_NAME, (Field field) -> faker.address().streetName())
-                .add(STREET_NAME, (Field field) -> faker.address().streetName())
-                .add(STREET_NAME, (Field field) -> faker.address().streetName())
-                .add(STREET_NAME, (Field field) -> faker.address().streetName())
+                .add(ROW_NUMBER, (Field field) -> faker.idNumber().ssnValid())
+
 
 
 
