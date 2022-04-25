@@ -51,17 +51,14 @@ public class OpenApiConfigurer {
     }
 
     private List<SecurityRequirement> getSecurityRequirement() {
-        SecurityRequirement securityRequirement = new SecurityRequirement();
-        securityRequirement.addList(SECURITY_SCHEME_NAME);
-        return List.of(securityRequirement);
+        return List.of(new SecurityRequirement().addList(SECURITY_SCHEME_NAME));
     }
 
     private SecurityScheme getSecurityScheme() {
-        SecurityScheme securityScheme = new SecurityScheme();
-        securityScheme.bearerFormat(BEARER_FORMAT);
-        securityScheme.type(SecurityScheme.Type.HTTP);
-        securityScheme.in(SecurityScheme.In.HEADER);
-        securityScheme.scheme(SCHEME);
-        return securityScheme;
+        return new SecurityScheme()
+                .bearerFormat(BEARER_FORMAT)
+                .type(SecurityScheme.Type.HTTP)
+                .in(SecurityScheme.In.HEADER)
+                .scheme(SCHEME);
     }
 }

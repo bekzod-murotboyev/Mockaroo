@@ -19,16 +19,21 @@ import java.util.Collection;
 @Entity(name = "users")
 public class User extends BaseEntity<Long> implements UserDetails {
 
-    String email;
+    String name;
+    String username;
     String password;
-
-    String phoneNumber;
-
 
     boolean accountNonExpired = true;
     boolean accountNonLocked = true;
     boolean credentialsNonExpired = true;
     boolean enabled = true;
+
+
+    public User(String name, String username, String password) {
+        this.name = name;
+        this.username = username;
+        this.password = password;
+    }
 
     @JsonIgnore
     @Override
@@ -36,9 +41,5 @@ public class User extends BaseEntity<Long> implements UserDetails {
         return null;
     }
 
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
 
 }

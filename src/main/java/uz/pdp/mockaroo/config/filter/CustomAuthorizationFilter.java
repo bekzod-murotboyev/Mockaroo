@@ -29,12 +29,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 String token = authorizationHeader.substring("Bearer ".length());
                 DecodedJWT decodedJWT = JwtUtils.getVerifier().verify(token);
                 String username = decodedJWT.getSubject();
-                String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
 
-                Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                Arrays.stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                SecurityContextHolder
+                        .getContext()
+                        .setAuthentication(
+                                new UsernamePasswordAuthenticationToken(username, null, null));
                 filterChain.doFilter(request, response);
             } catch (Exception exception) {
                 log.error("Error logging in: {}", exception.getMessage());

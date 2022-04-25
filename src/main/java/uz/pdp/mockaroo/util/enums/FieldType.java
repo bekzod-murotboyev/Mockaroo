@@ -1,7 +1,7 @@
 package uz.pdp.mockaroo.util.enums;
 
 public enum FieldType {
-    FIRSTNAME(true),  LASTNAME(true),   USERNAME(true),  FULLNAME(true), TITLE(true), PREFFIX(true), SUFFIX(true), BLOOD_GROUP(true),
+    FIRSTNAME(true), LASTNAME(true), USERNAME(true), FULLNAME(true), TITLE(true), PREFFIX(true), SUFFIX(true), BLOOD_GROUP(true),
 
     DIGIT(false), NUMBER_BETWEEN(false), RANDOM_NUMBER(false), RANDOM_DIGIT(false), RANDOM_DIGIT_NON_ZERO(false),
 
@@ -17,7 +17,7 @@ public enum FieldType {
 
     DESCRIPTION(true), TEMPERATURE_CELSIUS(true), TEMPERATURE_CELSIUS_PARAM(true), TEMPERATURE_FAHRENHEIT(true), TEMPERATURE_FAHRENHEIT_PARAM(true), CURRENCY_NAME(true), STRECURRENCY_CODE(true), ROW_NUMBER(true);
 
-    boolean isString;
+    final boolean isString;
 
     FieldType(boolean isString) {
         this.isString = isString;

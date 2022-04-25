@@ -1,33 +1,30 @@
 package uz.pdp.mockaroo.util.enums;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import uz.pdp.mockaroo.payload.dto.FormatField;
+import uz.pdp.mockaroo.payload.mock.FormatFieldDTO;
 
 import java.util.List;
 
 public enum Format {
     CSV(
-            new FormatField(
+            new FormatFieldDTO(
                     FormatType.SELECTBOX.name(),
                     List.of("Unix(LF)", "Windows(Crlf"),
                     "Line ending"),
-            new FormatField(
+            new FormatFieldDTO(
                     FormatType.CHECKBOX.name(),
                     null,
                     "Header"),
-            new FormatField(
+            new FormatFieldDTO(
                     FormatType.CHECKBOX.name(),
                     null,
                     "Boom")
     ),
     JSON(
-            new FormatField(
+            new FormatFieldDTO(
                     FormatType.CHECKBOX.name(),
                     null,
                     "Array"),
-            new FormatField(
+            new FormatFieldDTO(
                     FormatType.CHECKBOX.name(),
                     null,
                     "Include null values")),
@@ -41,10 +38,10 @@ public enum Format {
     XML,
     DBUNIT_XML;
 
-     List<FormatField> list;
+     List<FormatFieldDTO> list;
 
-    Format(FormatField... formatFields) {
-        this.list = List.of(formatFields);
+    Format(FormatFieldDTO... formatFieldDTOS) {
+        this.list = List.of(formatFieldDTOS);
     }
 
 }

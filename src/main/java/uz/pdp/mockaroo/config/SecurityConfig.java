@@ -44,10 +44,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.authorizeRequests()
-                .antMatchers("/**")
+        http
+                .authorizeRequests()
+                .antMatchers("/user/register","/home/init")
                 .permitAll()
-                .anyRequest().authenticated();
+                .anyRequest()
+                .authenticated();
 
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

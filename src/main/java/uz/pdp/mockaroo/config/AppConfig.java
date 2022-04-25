@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import uz.pdp.mockaroo.component.MockData;
-import uz.pdp.mockaroo.payload.filed.Field;
+import uz.pdp.mockaroo.payload.mock.filed.Field;
 
 import static uz.pdp.mockaroo.util.enums.FieldType.*;
 
@@ -18,6 +18,8 @@ public class AppConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 
 
     @Bean

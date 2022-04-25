@@ -1,4 +1,4 @@
-package uz.pdp.mockaroo.dto;
+package uz.pdp.mockaroo.payload.auth;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
@@ -11,7 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SessionDto implements Serializable {
+public class SessionDTO implements Serializable {
 
     private Long accessTokenExpiry;
 
@@ -22,4 +22,8 @@ public class SessionDto implements Serializable {
     private String accessToken;
 
     private String refreshToken;
+
+    private String username;
+
+    private String name;
 }

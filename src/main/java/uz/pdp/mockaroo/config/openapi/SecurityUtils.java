@@ -2,7 +2,7 @@ package uz.pdp.mockaroo.config.openapi;
 
 public class SecurityUtils {
     public final static String[] WHITE_LIST = {
-            "/api/login",
+            "/api/user/login",
             "/api/token/refresh",
             "/swagger-ui/**",
             "/api/docs/**",

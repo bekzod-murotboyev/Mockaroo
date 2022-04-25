@@ -1,5 +1,6 @@
-package uz.pdp.mockaroo.payload.filed;
+package uz.pdp.mockaroo.payload.mock.filed;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import uz.pdp.mockaroo.util.enums.FieldType;
@@ -9,6 +10,7 @@ import uz.pdp.mockaroo.util.enums.FieldType;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 public class Field {
     String name;
     FieldType type;

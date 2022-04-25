@@ -11,18 +11,17 @@ import uz.pdp.mockaroo.service.MockingService;
 
 @RestController
 @RequestMapping("/mock")
-public record MockController(MockingService mockingService){
+public record MockController(MockingService mockingService) {
 
-    // IT IS ONLY FOR SQL, FOR USING OTHER FORMAT YOU NEED TO CREATE ANOTHER METHOD WITH ANOTHER URL
-    @PostMapping("/download")
-    public ResponseEntity<ApiResponse> download(@RequestBody ApiRequestSql request) {
-        ApiResponse response=mockingService.download(request);
+    @PostMapping(path = "/download")
+    public ResponseEntity<ApiResponse<String>> downloadFile(@RequestBody ApiRequestSql request) {
+        ApiResponse<String> response = mockingService.getData(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/check")
-    public ResponseEntity<ApiResponse> check(@RequestBody ApiRequestSql request) {
-        ApiResponse response=mockingService.check(request);
+    public ResponseEntity<ApiResponse<String>> check(@RequestBody ApiRequestSql request) {
+        ApiResponse<String> response = mockingService.getData(request);
         return ResponseEntity.ok(response);
     }
 

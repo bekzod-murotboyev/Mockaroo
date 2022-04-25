@@ -1,6 +1,6 @@
 package uz.pdp.mockaroo.component;
 
-import uz.pdp.mockaroo.payload.filed.Field;
+import uz.pdp.mockaroo.payload.mock.filed.Field;
 import uz.pdp.mockaroo.util.enums.FieldType;
 
 import java.util.HashMap;

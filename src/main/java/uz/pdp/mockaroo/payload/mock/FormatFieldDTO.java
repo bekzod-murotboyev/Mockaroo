@@ -1,4 +1,4 @@
-package uz.pdp.mockaroo.payload.dto;
+package uz.pdp.mockaroo.payload.mock;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public  class FormatField{
+public  class FormatFieldDTO {
     String type;
     List<String> typeValues;
     String name;

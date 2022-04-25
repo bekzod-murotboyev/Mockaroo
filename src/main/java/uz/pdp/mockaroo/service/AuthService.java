@@ -6,6 +6,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -15,6 +16,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,12 +24,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 import uz.pdp.mockaroo.config.filter.JwtUtils;
-import uz.pdp.mockaroo.dto.AppErrorDto;
-import uz.pdp.mockaroo.dto.DataDto;
-import uz.pdp.mockaroo.dto.LoginDto;
-import uz.pdp.mockaroo.dto.SessionDto;
 import uz.pdp.mockaroo.entity.User;
-import uz.pdp.mockaroo.payload.response.ResponseEntity;
+import uz.pdp.mockaroo.payload.auth.LoginDTO;
+import uz.pdp.mockaroo.payload.auth.RegisterDTO;
+import uz.pdp.mockaroo.payload.auth.SessionDTO;
+import uz.pdp.mockaroo.payload.response.ApiResponse;
+import uz.pdp.mockaroo.payload.response.AppErrorDTO;
 import uz.pdp.mockaroo.property.ServerProperties;
 import uz.pdp.mockaroo.repository.UserRepository;
 
@@ -42,30 +44,25 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class AuthService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final ServerProperties serverProperties;
     private final ObjectMapper objectMapper;
+
     private final PasswordEncoder passwordEncoder;
 
-    public AuthService(UserRepository repository1, ServerProperties properties,
-                       ObjectMapper objectMapper, PasswordEncoder passwordEncoder) {
-        this.userRepository = repository1;
-        this.serverProperties = properties;
-        this.objectMapper = objectMapper;
-        this.passwordEncoder = passwordEncoder;
-    }
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email).orElseThrow(()->new UsernameNotFoundException(email+" not found!"));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username + " not found!"));
     }
 
-    public ResponseEntity<DataDto<SessionDto>> getToken(LoginDto dto) {
+    public ResponseEntity<ApiResponse<SessionDTO>> getToken(LoginDTO dto) {
 
         try {
             HttpClient httpclient = HttpClientBuilder.create().build();
-            HttpPost httppost = new HttpPost(serverProperties.getServerUrl() + "/api/login");
+            HttpPost httppost = new HttpPost(serverProperties.getServerUrl() + "/user/login");
             byte[] bytes = objectMapper.writeValueAsBytes(dto);
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
             httppost.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -74,13 +71,13 @@ public class AuthService implements UserDetailsService {
             JsonNode json_auth = objectMapper.readTree(EntityUtils.toString(response.getEntity()));
             if (json_auth.has("success") && json_auth.get("success").asBoolean()) {
                 JsonNode node = json_auth.get("data");
-                SessionDto sessionDto = objectMapper.readValue(node.toString(), SessionDto.class);
-                return new ResponseEntity<>(new DataDto<>(sessionDto), HttpStatus.OK);
+                SessionDTO sessionDto = objectMapper.readValue(node.toString(), SessionDTO.class);
+                return new ResponseEntity<>(new ApiResponse<>(sessionDto), HttpStatus.OK);
             }
-            return new ResponseEntity<>(new DataDto<>(objectMapper.readValue(json_auth.get("error").toString(),
-                    AppErrorDto.class)), HttpStatus.OK);
+            return ResponseEntity.ok(new ApiResponse<>(objectMapper.readValue(json_auth.get("error").toString(),
+                    AppErrorDTO.class)));
         } catch (IOException e) {
-            return new ResponseEntity<>(new DataDto<>(AppErrorDto.builder()
+            return new ResponseEntity<>(new ApiResponse<>(AppErrorDTO.builder()
                     .message(e.getLocalizedMessage())
                     .message(e.getMessage())
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -88,7 +85,7 @@ public class AuthService implements UserDetailsService {
         }
     }
 
-    public ResponseEntity<DataDto<SessionDto>> getRefreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<ApiResponse<SessionDTO>> getRefreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         // gets "Authentication" header from request
         String authorizationHeader = request.getHeader(AUTHORIZATION);
@@ -108,14 +105,14 @@ public class AuthService implements UserDetailsService {
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
 
                 // from payload part gets subject
-                String phoneNumber = decodedJWT.getSubject();
+                String username = decodedJWT.getSubject();
 
                 // gets phone from db
-                User user = getUserByPhone(phoneNumber);
+                User user = getUserByUsername(username);
 
                 //creates new access token
                 String access_token = JWT.create()
-                        .withSubject(user.getPhoneNumber())
+                        .withSubject(user.getUsername())
                         .withExpiresAt(JwtUtils.getExpiry())
                         .withIssuer(request.getRequestURL().toString())
 //                        .withClaim("roles", Collections.singletonList(user.getRole().name()))
@@ -131,12 +128,12 @@ public class AuthService implements UserDetailsService {
 
                 new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
-                SessionDto sessionDto = SessionDto.builder()
+                SessionDTO sessionDto = SessionDTO.builder()
                         .refreshToken(refresh_token)
                         .accessToken(access_token)
                         .build();
 
-                return new ResponseEntity<>(new DataDto<>(sessionDto));
+                return ResponseEntity.ok(new ApiResponse<>(sessionDto));
 
             } catch (Exception exception) {
                 response.setHeader("error", exception.getMessage());
@@ -147,17 +144,38 @@ public class AuthService implements UserDetailsService {
                 response.setContentType(MimeTypeUtils.APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
             }
-        } else {
-            return new ResponseEntity<>(new DataDto<>(new AppErrorDto(HttpStatus.NOT_FOUND, "Not Found")));
-        }
+        } else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(new AppErrorDTO(HttpStatus.NOT_FOUND, "Not Found")));
+
         return null;
     }
 
 
-    public User getUserByPhone(String phone) {
-        log.info("Getting user by phone : {}", phone);
-        return userRepository.findAuthUserByPhoneNumber(phone);
+    public User getUserByUsername(String username) {
+        log.error("User not found with username: {}", username);
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username + " not found"));
     }
 
+    public ResponseEntity<ApiResponse<?>> registerUser(RegisterDTO registerDTO) {
+        if (userRepository.findByUsername(registerDTO.getEmail()).isPresent())
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse<>("This username already exist", false));
+
+        userRepository
+                .save(
+                        new User(
+                                registerDTO.getName(),
+                                registerDTO.getEmail(),
+                                passwordEncoder.encode(registerDTO.getPassword())
+                        ));
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse
+                        .builder()
+                        .success(true)
+                        .message("Account successfully created")
+                        .build());
+
+    }
 
 }

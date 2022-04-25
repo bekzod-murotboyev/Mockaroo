@@ -2,7 +2,7 @@ package uz.pdp.mockaroo.payload.request.base;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import uz.pdp.mockaroo.payload.filed.Field;
+import uz.pdp.mockaroo.payload.mock.filed.Field;
 
 import java.util.List;
 

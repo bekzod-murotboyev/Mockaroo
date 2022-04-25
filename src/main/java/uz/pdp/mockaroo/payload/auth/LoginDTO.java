@@ -1,4 +1,4 @@
-package uz.pdp.mockaroo.dto;
+package uz.pdp.mockaroo.payload.auth;
 
 import lombok.*;
 
@@ -7,9 +7,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginDto {
+public class LoginDTO {
 
-    private String phoneNumber;
+    private String email;
 
     private String password;
 }
