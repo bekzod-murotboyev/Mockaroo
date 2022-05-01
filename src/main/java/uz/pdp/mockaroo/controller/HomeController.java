@@ -10,6 +10,7 @@ import uz.pdp.mockaroo.util.enums.FieldType;
 import uz.pdp.mockaroo.util.enums.Format;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/home")
@@ -19,8 +20,8 @@ public class HomeController {
     public ResponseEntity<ApiResponse<TypeFormatDTO>> init() {
         return ResponseEntity.ok(
                 new ApiResponse<>("Initial data successfully send",
-                        new TypeFormatDTO(Arrays.stream(FieldType.values()).map(FieldType::name).toList(),
-                                Arrays.stream(Format.values()).map(Format::name).toList())));
+                        new TypeFormatDTO(Arrays.stream(FieldType.values()).map(FieldType::name).collect(Collectors.toList()),
+                                Arrays.stream(Format.values()).map(Format::name).collect(Collectors.toList()))));
     }
 
 

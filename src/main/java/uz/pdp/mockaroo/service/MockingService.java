@@ -1,39 +1,37 @@
 package uz.pdp.mockaroo.service;
 
-import lombok.SneakyThrows;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
 import uz.pdp.mockaroo.component.MockData;
 import uz.pdp.mockaroo.payload.request.ApiRequestSql;
 import uz.pdp.mockaroo.payload.request.base.ApiRequest;
 import uz.pdp.mockaroo.payload.response.ApiResponse;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 @Service
-public record MockingService(MockData mockData) {
+@RequiredArgsConstructor
+public class MockingService {
 
-    private static final String DIRECTORY = "../file";
-    private static final String FILE = "file.txt";
+    private final MockData mockData;
 
     public ApiResponse<String> getData(ApiRequestSql request) {
-        String result = switch (request.getFormat()) {
-            case "SQL" -> dataSQl(request);
-            case "CSV" -> dataCSV(request);
-            case "JSON" -> dataJSON(request);
-            default -> "Error";
-        };
+        String result;
+        switch (request.getFormat()) {
+            case "SQL":
+                result = dataSQl(request);
+                break;
+            case "CSV":
+                result = dataCSV(request);
+                break;
+            case "JSON":
+                result = dataJSON(request);
+                break;
+            default:
+                result = "Error";
+        }
 
         return new ApiResponse<>("Success", result);
     }
@@ -106,11 +104,4 @@ public record MockingService(MockData mockData) {
         return stringBuffer.toString();
     }
 
-
-    public File checkFile(File file) throws IOException {
-        file.mkdir();
-        file = new File(file, FILE);
-        file.createNewFile();
-        return file;
-    }
 }

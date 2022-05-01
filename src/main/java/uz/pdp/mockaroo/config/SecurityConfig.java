@@ -16,8 +16,6 @@ import uz.pdp.mockaroo.config.filter.CustomAuthenticationFilter;
 import uz.pdp.mockaroo.config.filter.CustomAuthorizationFilter;
 import uz.pdp.mockaroo.service.AuthService;
 
-import static uz.pdp.mockaroo.config.openapi.SecurityUtils.WHITE_LIST;
-
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration

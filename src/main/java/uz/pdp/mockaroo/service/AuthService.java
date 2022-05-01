@@ -158,7 +158,7 @@ public class AuthService implements UserDetailsService {
 
     public ResponseEntity<ApiResponse<?>> registerUser(RegisterDTO registerDTO) {
         if (userRepository.findByUsername(registerDTO.getEmail()).isPresent())
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse<>("This username already exist", false));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse<>("This email already exist", false));
 
         userRepository
                 .save(

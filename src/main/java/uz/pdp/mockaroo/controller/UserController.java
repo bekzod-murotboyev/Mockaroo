@@ -12,6 +12,7 @@ import uz.pdp.mockaroo.service.AuthService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -22,7 +23,7 @@ public class UserController {
 
 
     @PostMapping("/token")
-    public ResponseEntity<ApiResponse<SessionDTO>> getToken(@RequestBody LoginDTO dto) {
+    public ResponseEntity<ApiResponse<SessionDTO>> getToken(@Valid @RequestBody LoginDTO dto) {
         return authService.getToken(dto);
     }
 
@@ -33,7 +34,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<?>> doRegister(@RequestBody RegisterDTO registerDTO){
+    public ResponseEntity<ApiResponse<?>> doRegister(@Valid @RequestBody RegisterDTO registerDTO){
         return authService.registerUser(registerDTO);
     }
 }

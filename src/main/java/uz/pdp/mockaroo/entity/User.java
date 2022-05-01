@@ -8,7 +8,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.pdp.mockaroo.entity.base.BaseEntity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
 @AllArgsConstructor
@@ -19,8 +21,12 @@ import java.util.Collection;
 @Entity(name = "users")
 public class User extends BaseEntity<Long> implements UserDetails {
 
+    @Column(nullable = false)
     String name;
+
+    @Column(nullable = false, unique = true)
     String username;
+    @Column(nullable = false)
     String password;
 
     boolean accountNonExpired = true;
