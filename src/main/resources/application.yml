@@ -1,12 +1,12 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://mockaroo.cdgdbfweslzx.us-east-1.rds.amazonaws.com:5432/postgres
-    password: AB5939523
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
+    password: 5939523
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     open-in-view: true
   messages:
